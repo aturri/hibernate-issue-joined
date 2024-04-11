@@ -33,7 +33,7 @@ public class JPAUnitTestCase {
     // Entities are auto-discovered, so just add them anywhere on class-path
     // Add your tests, using standard JUnit.
     @Test
-    public void testQueryDetailsFromParentJoined() {
+    public void hhh17944_testQueryDetailsFromParentJoined() {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
 
@@ -46,6 +46,30 @@ public class JPAUnitTestCase {
 
         final List<TestSpecializedEntity> results = entityManager.createQuery(
                 "select d from TestSpecializedEntity e join e.details d where e.id = :id", TestSpecializedEntity.class
+            )
+            .setParameter("id", entity.id)
+            .getResultList();
+
+        Assertions.assertEquals(2, results.size());
+
+        entityManager.getTransaction().commit();
+        entityManager.close();
+    }
+
+    @Test
+    public void hhh17944_testQueryDetailsFromParentJoined_noExplicitJoin() {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        entityManager.getTransaction().begin();
+
+        final TestSpecializedEntity entity = new TestSpecializedEntity();
+        entity.baseAttribute = "A";
+        entity.anotherAttribute = "B";
+        new TestDetailEntity(entity, "C");
+        new TestDetailEntity(entity, "D");
+        entityManager.persist(entity);
+
+        final List<TestSpecializedEntity> results = entityManager.createQuery(
+                "select e.details from TestSpecializedEntity e where e.id = :id", TestSpecializedEntity.class
             )
             .setParameter("id", entity.id)
             .getResultList();
