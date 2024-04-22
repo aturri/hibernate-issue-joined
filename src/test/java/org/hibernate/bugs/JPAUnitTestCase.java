@@ -44,8 +44,8 @@ public class JPAUnitTestCase {
         new TestDetailEntity(entity, "D");
         entityManager.persist(entity);
 
-        final List<TestSpecializedEntity> results = entityManager.createQuery(
-                "select d from TestSpecializedEntity e join e.details d where e.id = :id", TestSpecializedEntity.class
+        final List<TestDetailEntity> results = entityManager.createQuery(
+                "select d from TestSpecializedEntity e join e.details d where e.id = :id", TestDetailEntity.class
             )
             .setParameter("id", entity.id)
             .getResultList();
@@ -68,8 +68,8 @@ public class JPAUnitTestCase {
         new TestDetailEntity(entity, "D");
         entityManager.persist(entity);
 
-        final List<TestSpecializedEntity> results = entityManager.createQuery(
-                "select e.details from TestSpecializedEntity e where e.id = :id", TestSpecializedEntity.class
+        final List<TestDetailEntity> results = entityManager.createQuery(
+                "select e.details from TestSpecializedEntity e where e.id = :id", TestDetailEntity.class
             )
             .setParameter("id", entity.id)
             .getResultList();
